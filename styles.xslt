@@ -85,182 +85,87 @@ Copyright (c) 2016 by Moritz Wilhelmy <mw@barfooze.de>
 				<xsl:value-of select="concat(substring($iso-timestamp, 0, 11), ' ', substring($iso-timestamp, 12, 5))" />
 			</xsl:template>
 			<xsl:template match="directory">
-				<tr>
-					<td class="icon">
+				<tr class="hover:bg-gray-300 transition-colors ease-in-out border-b">
+					<td></td>
+					<td class="icon px-1 py-2">
 						<img style="width: 20px; height: 20px" src="https://public.abdus.net/icons/folder.svg" />
 					</td>
-					<td class="n">
+					<td class="px-1 py-2">
 						<a href="{str:encode-uri(current(),true())}/">
 							<xsl:value-of select="."/>
 						</a>
 					</td>
-					<td class="m">
+					<td class="px-1 py-2">
 						<xsl:call-template name="timestamp">
 							<xsl:with-param name="iso-timestamp" select="@mtime" />
 						</xsl:call-template>
 					</td>
-					<td class="s">- &nbsp;</td>
-					<td class="t">Directory</td>
+					<td class="px-1 py-2 text-right"> - </td>
+					<td class="px-1 py-2 text-right">Directory</td>
 				</tr>
 			</xsl:template>
 			<xsl:template match="file">
-				<tr>
+				<tr class="hover:bg-gray-300 transition-colors ease-in-out border-b">
+					<td class="px-1 py-2"><input type="checkbox" /></td>
 					<td class="icon">
 						<img style="width: 20px; height: 20px" src="https://public.abdus.net/icons/file.svg" />
 					</td>
-					<td class="n">
+					<td class="px-1 py-2">
 						<a href="{str:encode-uri(current(),true())}">
 							<xsl:value-of select="." />
 						</a>
 					</td>
-					<td class="m">
+					<td class="px-1 py-2">
 						<xsl:call-template name="timestamp">
 							<xsl:with-param name="iso-timestamp" select="@mtime" />
 						</xsl:call-template>
 					</td>
-					<td class="s">
+					<td class="px-1 py-2 text-right">
 						<xsl:call-template name="size">
 							<xsl:with-param name="bytes" select="@size" />
 						</xsl:call-template>
 					</td>
-					<td class="t">File</td>
+					<td class="px-1 py-2 text-right">File</td>
 				</tr>
 			</xsl:template>
 			<xsl:template match="/">
 				<html>
 					<head>
-						<style type="text/css">
-								a,
-								a:active {
-								color: #6a422b;
-								text-decoration: none;
-								}
-								h2 {
-								margin-bottom: 12px;
-								}
-								html {
-								padding: 2rem;
-								font-family: "IBM Plex Serif", serif;
-								background-image: url(https://public.abdus.net/imgs/minecraft-bg.jpg);
-								}
-
-								body {
-								width: 100%;
-								max-width: 60rem;
-								margin: auto;
-								background-color: #000;
-								border-radius: 0.3rem;
-								}
-
-								header {
-								display: flex;
-								align-items: center;
-								justify-content: center;
-								padding: 4rem 2rem;
-								color: #fff;
-								font-size: 1.8em;
-								font-family: "This Sucks", serif;
-								}
-
-								.list {
-								max-width: 100%;
-								overflow: auto;
-								}
-
-								table {
-								width: 100%;
-								min-width: 800px;
-								background-color: #f3f3f3;
-								border-collapse: collapse;
-								}
-
-								thead,
-								tbody {
-								text-align: left;
-								}
-
-								td,
-								th {
-								max-width: 100%;
-								padding: 0.5rem 0.8rem;
-								text-overflow: ellipsis;
-								}
-
-								tr:nth-child(odd) {
-								background-color: #e7e7e7;
-								}
-
-								tr:hover {
-								background-color: #cbcbcb;
-								}
-
-								.icon {
-								max-width: 0;
-								padding-right: 0;
-								}
-
-								.foot {
-								padding: 1rem;
-								color: gray;
-								text-align: right;
-								}
-
-								#search-box {
-								padding: 0.5rem;
-								font: inherit;
-								width: 100%;
-								text-align: center;
-								outline: none;
-								}
-
-								@media (max-width: 900px) {
-								html {
-								padding: 0;
-								}
-
-								body {
-								border-radius: 0;
-								}
-
-								header {
-								padding: 2rem 0;
-								}
-								}
-
-								th {
-								color: #fff;
-								background-color: #ff4800;
-								}
-						</style>
+						<style type="text/css"></style>
 						<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+						<meta charset="UTF-8" />
+
 						<title>
 								Index of
 
 							<xsl:value-of select="$path"/>
 						</title>
-						<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/thisisabdus/fonts@master/this-sucks/index.min.css" />
-						<link rel="preconnect" href="https://fonts.gstatic.com" />
-						<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@400;700" rel="stylesheet" />
+						<link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet" />
+
 					</head>
-					<body>
-						<header>
-								Welcome!
-						</header>
-						<input
-							type="search"
-							id="search-box"
-							onkeyup="handleSearch()"
-							placeholder="start typing..."
-							/>
+					<body class="container mx-auto">
+						<div class="flex justify-between pb-10 pt-5">
+							<div class="text-3xl font-extrabold text-gray-900 tracking-tight">
+								<xsl:value-of select="$hostname" />
+							</div>
+							<input
+								type="search"
+								id="search-box"
+								oninput="handleSearch()"
+								placeholder="filter results"
+								class="transition focus:outline-none focus:ring focus:border-blue-300 border border-gray-300 px-2 py-1"
+								/>
+						</div>
 						<div class="list">
-							<table summary="Directory Listing" cellpadding="0" cellspacing="0">
+							<table summary="Directory Listing" class="w-full table-auto border-collapse">
 								<thead>
-									<tr>
+									<tr class="z-20 sticky text-sm font-semibold text-gray-600 bg-white p-0">
 										<th></th>
-										<th>Name</th>
-										<th class="m">Last Modified</th>
-										<th class="s">Size</th>
-										<th class="t">Type</th>
+										<th></th>
+										<th class="">Name</th>
+										<th class="">Last Modified</th>
+										<th class="">Size</th>
+										<th class="">Type</th>
 									</tr>
 								</thead>
 								<!-- uncomment the following block to enable totals -->
@@ -272,63 +177,55 @@ Copyright (c) 2016 by Moritz Wilhelmy <mw@barfooze.de>
 										<td>&nbsp;</td>
 										<td>&nbsp;</td>
 										<td>&nbsp;</td>
+										<td>&nbsp;</td>
 									</tr>
-									<tr>
-										<td colspan="5">
-											<xsl:value-of select="count(//directory)"/> Directories,
+								</tfoot>
+								<tbody>
+									<tr class="border-b">
+										<td class="px-1 py-2"></td>
+										<td class="px-1 py-2 icon"></td>
+										<td class="px-1 py-2">
+											<a href="../">🔙</a>
+										</td>
+										<td class="px-1 py-2"></td>
+										<td class="px-1 py-2 text-right"> - </td>
+										<td class="px-1 py-2 text-right">Special</td>
+									</tr>
+									<xsl:apply-templates />
+								</tbody>
+							</table>
+						</div>
+						<div class="flex justify-between py-4 text-sm text-gray-500">
+						<div>
+							<xsl:value-of select="count(//directory)"/> Directories, <xsl:value-of select="count(//file)"/> Files, <xsl:call-template name="size"> <xsl:with-param name="bytes" select="sum(//file/@size)" /> </xsl:call-template> Total
+						</div>
+						<div class="foot">powered by Nginx</div>
+					</div>
+						<script>
+								document.querySelector("#search-box").style.display = '';
 
+								function handleSearch() {
+								const input = document.querySelector("#search-box");
+								const filter = input.value.toUpperCase();
+								const table = document.querySelector("table");
+								const trGroup = [...table.querySelectorAll("tr")];
 
-											<xsl:value-of select="count(//file)"/> Files,
+								trGroup.forEach(tr => {
+								td = tr.querySelector("td:nth-child(2)");
 
+								if (td) {
+								const tdContent = td.textContent || td.innerText;
 
-											<xsl:call-template name="size">
-												<xsl:with-param name="bytes" select="sum(//file/@size)" />
-												</xsl:call-template> Total
-
-
-											</td>
-										</tr>
-									</tfoot>
-									<tbody>
-										<tr>
-											<td class="icon"></td>
-											<td>
-												<a href="../">..</a>
-											</td>
-											<td class="m">&nbsp;</td>
-											<td class="s">- &nbsp;</td>
-											<td class="t">Special</td>
-										</tr>
-										<xsl:apply-templates />
-									</tbody>
-								</table>
-							</div>
-							<div class="foot">powered by Nginx</div>
-							<script>
-									document.querySelector("#search-box").style.display = '';
-
-									function handleSearch() {
-									const input = document.querySelector("#search-box");
-									const filter = input.value.toUpperCase();
-									const table = document.querySelector("table");
-									const trGroup = [...table.querySelectorAll("tr")];
-
-									trGroup.forEach(tr => {
-									td = tr.querySelector("td:nth-child(2)");
-
-									if (td) {
-									const tdContent = td.textContent || td.innerText;
-
-									if (tdContent.toUpperCase().includes(filter)) {
-									tr.style.display = "";
-									} else {
-									tr.style.display = "none";
-									}
-									}
-									})
-									}
-							</script>
-						</body>
-					</html>
-				</xsl:template>
-			</xsl:stylesheet>
+								if (tdContent.toUpperCase().includes(filter)) {
+								tr.style.display = "";
+								} else {
+								tr.style.display = "none";
+								}
+								}
+								})
+								}
+						</script>
+					</body>
+				</html>
+			</xsl:template>
+		</xsl:stylesheet>
