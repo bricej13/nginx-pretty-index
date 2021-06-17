@@ -2,7 +2,7 @@
 
 > XSLT styles for Nginx AutoIndex Pages
 
-![pretty nginx autoindex](./screenshots/1.png)
+![pretty nginx autoindex](./screenshot1.png)
 
 ## Installation
 
